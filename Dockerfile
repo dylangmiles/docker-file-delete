@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 debian:stretch
+FROM debian:stretch
 MAINTAINER	Dylan Miles <dylan.g.miles@gmail.com>
 
 # install required packages
