@@ -2,11 +2,6 @@
 
 Create schedule backups of databases in a PostgreSQL server to a destination directory.
 
-https://unix.stackexchange.com/questions/64478/list-all-files-newer-than-given-timestamp-and-sort-them
-https://tecadmin.net/delete-files-older-x-days/
-https://superuser.com/questions/620381/removing-files-older-then-1-month-but-leave-one-file-per-month
-https://superuser.com/questions/559224/removing-files-older-then-1-month-but-leave-files-created-at-the-1st-day-of-the
-
 ## Build the contiainer
 ```
 $ make
