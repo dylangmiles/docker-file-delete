@@ -36,9 +36,17 @@ if [ "$RETVAL" == 0 ]; then
 
 fi
 
+# Expand the command
+COMMAND=-$COMMAND
+
+# Always print the files deleted
+if [ "$COMMAND" == "-delete"  ]; then
+  COMMAND="$COMAND -print"
+fi
+
 
 # Delete files
-find $DIRECTORY $INCLUDE_PATTERN $EXCLUDE_PATTERN -$COMMAND
+find $DIRECTORY $INCLUDE_PATTERN $EXCLUDE_PATTERN $COMMAND
 
 RETVAL=$?
 
