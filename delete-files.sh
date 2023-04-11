@@ -41,9 +41,8 @@ COMMAND=-$COMMAND
 
 # Always print the files deleted
 if [ "$COMMAND" == "-delete"  ]; then
-  COMMAND="$COMAND -print"
+  COMMAND="$COMMAND -print"
 fi
-
 
 # Delete files
 find $DIRECTORY $INCLUDE_PATTERN $EXCLUDE_PATTERN $COMMAND
