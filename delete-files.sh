@@ -5,13 +5,6 @@ DIRECTORY=${DIRECTORY:-/var/destination}
 #EXCLUDE_PATTERN=
 COMMAND=${COMMAND:-print}
 
-echo Using the following configuration:
-echo
-echo "    directory:          ${DIRECTORY}"
-echo "    include pattern:    ${INCLUDE_PATTERN}"
-echo "    exclude pattern:    ${EXCLUDE_PATTERN}"
-echo "    command:            ${COMMAND}"
-echo
 
 # Expand patterns
 INCLUDE_PATTERN="$(eval "echo ${INCLUDE_PATTERN}")"
@@ -21,6 +14,15 @@ if [ "$RETVAL" == 0 ]; then
   EXCLUDE_PATTERN="$(eval "echo ${EXCLUDE_PATTERN}")"
   RETVAL=$?
 fi
+
+echo Using the following configuration:
+echo
+echo "    directory:          ${DIRECTORY}"
+echo "    include pattern:    ${INCLUDE_PATTERN}"
+echo "    exclude pattern:    ${EXCLUDE_PATTERN}"
+echo "    command:            ${COMMAND}"
+echo
+
 
 if [ "$RETVAL" == 0 ]; then
 
@@ -34,9 +36,6 @@ if [ "$RETVAL" == 0 ]; then
 
 fi
 
-# Resolve patterns
-INCLUDE_PATTERN="$(eval "echo ${INCLUDE_PATTERN}")"
-EXCLUDE_PATTERN="$(eval "echo ${EXCLUDE_PATTERN}")"
 
 # Delete files
 find $DIRECTORY $INCLUDE_PATTERN $EXCLUDE_PATTERN -$COMMAND
