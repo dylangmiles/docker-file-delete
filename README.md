@@ -24,17 +24,17 @@ INCLUDE_PATTERN=$$(date +%Y%m%d -d "last week")_*.???.gz
 # Keep the back up from last Sunday
 EXCLUDE_PATTERN=$$(date +%Y%m%d -d "last Sunday")_*.???.gz
 
-# Command print | delete
-COMMAND=print
-
 # METHOD local | aws
 LOCATION=aws
 
 # The location where backups will be written to if file based
-DESTINATION=./data/destination
+LOCAL_DESTINATION=./data/destination
 
-# The location that will be backed up
-SOURCE=./data/source
+# Command print | delete
+LOCAL_COMMAND=print
+
+# AWS dry run remove. 0 - false | 1 - true (default)
+AWS_DRYRUN=1
 
 # AWS Access Key
 AWS_ACCESS_KEY=***************

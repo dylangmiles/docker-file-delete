@@ -13,7 +13,8 @@ services:
         - INCLUDE_PATTERN
         - EXCLUDE_PATTERN
         - LOCATION
-        - LOCAL_DESTINATION
+        - LOCAL_COMMAND
+        - AWS_DRYRUN
         - AWS_ACCESS_KEY
         - AWS_SECRET_KEY
         - AWS_REGION
