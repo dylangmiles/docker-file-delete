@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+# Get last error even in piped commands
+set -o pipefail
 
 PIDFILE=/var/run/delete-run.pid
 
@@ -9,9 +12,25 @@ fi
 
 echo $$ >$PIDFILE
 
-/usr/local/sbin/delete-files.sh
+OUT_BUFF=$( /usr/local/sbin/delete-files.sh 2>&1 | tee /proc/1/fd/1 )
 
-retval=$?
+RETVAL=$?
+
+# Calculate result in words
+RESULT="unknown"
+if [ "$RETVAL" == 0 ]; then
+	RESULT="success"
+else
+	RESULT="failed"
+fi
+
+# Email results
+ssmtp "${MAIL_TO}" <<EOF
+To:${MAIL_TO}
+From:${SMTP_FROM}
+Subject:Backup ${RESULT}: ${FILENAME}
+${OUT_BUFF}
+EOF
 
 rm $PIDFILE
 

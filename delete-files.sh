@@ -1,19 +1,16 @@
 #!/bin/bash
 
 DIRECTORY=${DIRECTORY:-/var/destination}
-#INCLUDE_PATTERN=
-#EXCLUDE_PATTERN=
 COMMAND=${COMMAND:-print}
 
-
 # Expand patterns
-INCLUDE_PATTERN="$(eval "echo ${INCLUDE_PATTERN}")"
-RETVAL=$?
+INCLUDE_PATTERN="$(eval "echo ${INCLUDE_PATTERN}")" || {
+  exit $?
+}
 
-if [ "$RETVAL" == 0 ]; then
-  EXCLUDE_PATTERN="$(eval "echo ${EXCLUDE_PATTERN}")"
-  RETVAL=$?
-fi
+EXCLUDE_PATTERN="$(eval "echo ${EXCLUDE_PATTERN}")" || {
+  exit $?
+}
 
 echo Using the following configuration:
 echo
@@ -24,8 +21,8 @@ echo "    command:            ${COMMAND}"
 echo
 
 
-if [ "$RETVAL" == 0 ]; then
-
+# Delete files
+if [ "$LOCATION" == "local" ]; then
   if [ "$INCLUDE_PATTERN" ]; then
     INCLUDE_PATTERN="-name $INCLUDE_PATTERN"
   fi
@@ -34,20 +31,36 @@ if [ "$RETVAL" == 0 ]; then
     EXCLUDE_PATTERN="! -name $EXCLUDE_PATTERN"
   fi
 
+  # Expand the command
+  COMMAND=-$COMMAND
+
+  # Always print the files deleted
+  if [ "$COMMAND" == "-delete"  ]; then
+    COMMAND="$COMMAND -print"
+  fi
+
+  find $DIRECTORY $INCLUDE_PATTERN $EXCLUDE_PATTERN $COMMAND
+
+  RETVAL=$?
 fi
 
-# Expand the command
-COMMAND=-$COMMAND
+if [ "$LOCATION" == "aws" ]; then
 
-# Always print the files deleted
-if [ "$COMMAND" == "-delete"  ]; then
-  COMMAND="$COMMAND -print"
+  if [ "$INCLUDE_PATTERN" ]; then
+    INCLUDE_PATTERN="--include $INCLUDE_PATTERN"
+  fi
+
+  if [ "$EXCLUDE_PATTERN" ]; then
+    EXCLUDE_PATTERN="--exclude $EXCLUDE_PATTERN"
+  fi
+
+	aws s3 rm ${AWS_DESTINATION} --recursive --exclude "*" ${INCLUDE_PATTERN} ${EXCLUDE_PATTERN} --dryrun
+  #aws s3 rm ${AWS_DESTINATION} --recursive --exclude "*" $INCLUDE_PATTERN --dryrun
+  #aws s3 rm ${AWS_DESTINATION} --recursive --exclude "*" --include "20230825*.tar.gz" --dryrun
+
+  RETVAL=$?
+
 fi
-
-# Delete files
-find $DIRECTORY $INCLUDE_PATTERN $EXCLUDE_PATTERN $COMMAND
-
-RETVAL=$?
 
 echo
 
@@ -56,5 +69,5 @@ if [ "$RETVAL" == 0 ]; then
 	exit 0
 else
 	echo Delete matched files failed.
-	exit 1
+	exit $RETVAL
 fi

@@ -1,48 +1,72 @@
-# Scheduled File Deletion
+# docker-file-delete
 
-Create schedule backups of databases in a PostgreSQL server to a destination directory.
+This container can be used to periodically delete files.
 
-## Build the contiainer
+You can check the last run with the integrated HTTP server on port 18080.
+
+The container can monitor a local directory or Amazon S3 bucket location and files can be deleted based on a pattern.
+
+# Setup
+
+1. Clone this repository to your server with files that need to be backed up
 ```
-$ make
-```
-
-## Start a scheduled backup
-
-```shell
-docker run \
--v /var/destination:/var/destination \
--e TIMEZONE="Africa/Johannesburg" \
--e SCHEDULE="0 0 3 * *" \
--e INCLUDE_PATTERN="2023*.sql.gz" \
--e EXCLUDE_PATTERN="????????_09*.sql.gz" \
-dylangmiles/docker-pg-backup
+git clone git@github.com:dylangmiles/docker-file-delete.git
 ```
 
-## Run a backup once off
+2. Create a `.env` file in the directory with the following settings:
+```bash
+# Cron schedule
+SCHEDULE=* * * * *
 
-```shell
-docker run \
---entrypoint="/usr/local/sbin/delete-run.sh" \
--v ~/dev/temp/backups:/var/destination \
--e INCLUDE_PATTERN="2023*.sql.gz" \
--e EXCLUDE_PATTERN="????????_09*.sql.gz" \
-dylangmiles/docker-file-delete
+# Delete back up on this day from last week
+INCLUDE_PATTERN=$$(date +%Y%m%d -d "last week")_*.???.gz
 
-```shell
-## Sample docker compose
+# Keep the back up from last Sunday
+EXCLUDE_PATTERN=$$(date +%Y%m%d -d "last Sunday")_*.???.gz
 
-version: "3.9"
-services:
-    clean:
-        build: .
-        volumes:
-            - ~/dev/temp/backups:/var/destination
-        environment:
-            - SCHEDULE="0 0 3 * *"
-            - INCLUDE_PATTERN="$$(date +%Y)*.sql.gz"
-            - EXCLUDE_PATTERN="????????_09*.sql.gz"
+# Command print | delete
+COMMAND=print
+
+# METHOD local | aws
+LOCATION=aws
+
+# The location where backups will be written to if file based
+DESTINATION=./data/destination
+
+# The location that will be backed up
+SOURCE=./data/source
+
+# AWS Access Key
+AWS_ACCESS_KEY=***************
+
+# AWS Secret Key
+AWS_SECRET_KEY=***************
+
+# AWS Region
+AWS_REGION=eu-west-1
+
+# AWS Bucket name
+AWS_DESTINATION=s3://bucketname/path
+
+# Email address where notifications are sent
+MAIL_TO=name@email.com
+
+# Email sending options
+SMTP_FROM=from@email.com
+SMTP_SERVER=mail.server.com:587
+SMTP_HOSTNAME=local.server.com
+SMTP_USERNAME=username@email.com
+SMTP_PASSWORD=*******
+
 ```
 
+3. Start the container
+```
+docker compose up -d file-delete
+```
 
+You can also manually run the backup from the command line
+```
+docker compose run --rm file-delete delete-run.sh
+```
 
