@@ -55,7 +55,7 @@ if [ "$LOCATION" == "aws" ]; then
   echo "    path:               ${AWS_DESTINATION}"
   echo "    include pattern:    ${INCLUDE_PATTERN}"
   echo "    exclude pattern:    ${EXCLUDE_PATTERN}"
-  echo "    aws:                ${AWS_DRYRUN}"
+  echo "    dryrun:             ${AWS_DRYRUN}"
   echo
 
   if [ "$INCLUDE_PATTERN" ]; then
