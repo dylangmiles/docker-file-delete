@@ -28,7 +28,7 @@ fi
 ssmtp "${MAIL_TO}" <<EOF
 To:${MAIL_TO}
 From:${SMTP_FROM}
-Subject:File cleanup ${RESULT}
+Subject:File cleanup ${RESULT}: ${NAME}
 ${OUT_BUFF}
 EOF
 
