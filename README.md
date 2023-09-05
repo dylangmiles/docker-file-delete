@@ -52,8 +52,10 @@ AWS_DESTINATION=s3://bucketname/path
 MAIL_TO=name@email.com
 
 # Email sending options
+SMTP_FROMNAME=FromName
 SMTP_FROM=from@email.com
-SMTP_SERVER=mail.server.com:587
+SMTP_HOST=mail.server.com
+SMTP_PORT=587
 SMTP_HOSTNAME=local.server.com
 SMTP_USERNAME=username@email.com
 SMTP_PASSWORD=*******
