@@ -24,11 +24,7 @@ else
 	RESULT="failed"
 fi
 
-# Email results
-ssmtp "${MAIL_TO}" <<EOF
-To:${MAIL_TO}
-From:${SMTP_FROM}
-Subject:File cleanup ${RESULT}: ${NAME}
+cat <<EOF | mutt -s "File cleanup ${RESULT}: ${NAME}" -- $MAIL_TO
 ${OUT_BUFF}
 EOF
 

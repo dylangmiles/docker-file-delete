@@ -7,7 +7,8 @@ aws configure set aws_secret_access_key ${AWS_SECRET_KEY}
 aws configure set default.region ${AWS_REGION}
 
 echo "Setting up SMTP settings"
-envsubst < /etc/ssmtp/ssmtp.conf.template > /etc/ssmtp/ssmtp.conf
+envsubst < /root/.muttrc.template > /root/.muttrc
+envsubst < /root/.msmtprc.template > /root/.msmtprc
 
 if [ -n "$TIMEZONE" ]; then
 	echo ${TIMEZONE} > /etc/timezone && \
