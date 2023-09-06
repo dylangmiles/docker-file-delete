@@ -8,20 +8,4 @@ services:
         - $LOCAL_DESTINATION:/var/destination
     ports:
         - 127.0.0.1:18080:18080
-    environment:
-        - SCHEDULE
-        - INCLUDE_PATTERN
-        - EXCLUDE_PATTERN
-        - LOCATION
-        - LOCAL_COMMAND
-        - AWS_DRYRUN
-        - AWS_ACCESS_KEY
-        - AWS_SECRET_KEY
-        - AWS_REGION
-        - AWS_DESTINATION
-        - MAIL_TO
-        - SMTP_FROM
-        - SMTP_SERVER
-        - SMTP_HOSTNAME
-        - SMTP_USERNAME
-        - SMTP_PASSWORD
+    env_file: .env
