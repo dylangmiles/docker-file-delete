@@ -20,12 +20,14 @@ RUN		apt-get update -qq && \
 ENV		GO_CRON_VERSION v0.0.10
 
 # linux/arm64 packages
+# GO CRON
 RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] ; then \
 	curl -L "https://github.com/prodrigestivill/go-cron/releases/download/v0.0.10/go-cron-linux-arm64.gz" \
 	| zcat > /usr/local/bin/go-cron \
 	&& chmod u+x /usr/local/bin/go-cron; \
 	fi
 
+# AWS CLI
 RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] ; then \
 	curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" \
 	&& unzip awscliv2.zip \
@@ -33,17 +35,35 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] ; then \
 	; \
 	fi
 
+# AzureCopy
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] ; then \
+	curl "https://aka.ms/downloadazcopy-v10-linux-arm64" -L -o "downloadazcopy-v10-linux-arm64.tar.gz" \
+	&& tar -xzvf downloadazcopy-v10-linux-arm64.tar.gz \
+	&& cp ./azcopy_linux_arm64_*/azcopy /usr/bin/ \
+	; \
+	fi
+
 # linux/amd64 packages
+# GO CRON
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
 	curl -L "https://github.com/prodrigestivill/go-cron/releases/download/v0.0.10/go-cron-linux-amd64.gz" \
 	| zcat > /usr/local/bin/go-cron \
 	&& chmod u+x /usr/local/bin/go-cron; \
 	fi
 
+# AWS CLI
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
 	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
 	&& unzip awscliv2.zip \
 	&& ./aws/install \
+	; \
+	fi
+
+# AzureCopy
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
+	curl "https://aka.ms/downloadazcopy-v10-linux" -L -o "downloadazcopy-v10-linux.tar.gz" \
+	&& tar -xzvf downloadazcopy-v10-linux.tar.gz \
+	&& cp ./azcopy_linux_amd64_*/azcopy /usr/bin/ \
 	; \
 	fi
 

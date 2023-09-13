@@ -78,6 +78,39 @@ if [ "$LOCATION" == "aws" ]; then
 
 fi
 
+if [ "$LOCATION" == "azure" ]; then
+
+  AZURE_DRYRUN=${AZURE_DRYRUN:-1}
+  AZURE_DESTINATION="https://${AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${AZURE_STORAGE_BLOB_CONTAINER}/${AZURE_STORAGE_BLOB_PREFIX}"
+
+  echo Using the following configuration:
+  echo "    location:           $LOCATION"
+  echo "    path:               ${AZURE_DESTINATION}"
+  echo "    include pattern:    ${INCLUDE_PATTERN}"
+  echo "    exclude pattern:    ${EXCLUDE_PATTERN}"
+  echo "    dryrun:             ${AZURE_DRYRUN}"
+  echo
+
+  if [ "$INCLUDE_PATTERN" ]; then
+    P_INCLUDE_PATTERN="--include-pattern $INCLUDE_PATTERN"
+  fi
+
+  if [ "$EXCLUDE_PATTERN" ]; then
+    P_EXCLUDE_PATTERN="--exclude-pattern $EXCLUDE_PATTERN"
+  fi
+
+  # Default to dry run
+  P_AZURE_DRYRUN=--dry-run
+  if [ "$AZURE_DRYRUN" == 0 ]; then
+    P_AZURE_DRYRUN=
+  fi
+
+	azcopy rm ${AZURE_DESTINATION} ${P_INCLUDE_PATTERN} ${P_EXCLUDE_PATTERN} ${P_AZURE_DRYRUN}
+
+  RETVAL=$?
+
+fi
+
 echo
 
 if [ "$RETVAL" == 0 ]; then

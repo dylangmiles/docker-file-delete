@@ -24,7 +24,7 @@ INCLUDE_PATTERN=$$(date +%Y%m%d -d "last week")_*.???.gz
 # Keep the back up from last Sunday
 EXCLUDE_PATTERN=$$(date +%Y%m%d -d "last Sunday")_*.???.gz
 
-# METHOD local | aws
+# LOCATION local | aws | azure
 LOCATION=aws
 
 # The location where backups will be written to if file based
@@ -36,17 +36,22 @@ LOCAL_COMMAND=print
 # AWS dry run remove. 0 - false | 1 - true (default)
 AWS_DRYRUN=1
 
-# AWS Access Key
-AWS_ACCESS_KEY=***************
-
-# AWS Secret Key
-AWS_SECRET_KEY=***************
-
-# AWS Region
+# AWS Storage
+AWS_ACCESS_KEY=**************
+AWS_SECRET_KEY=******************************
 AWS_REGION=eu-west-1
-
-# AWS Bucket name
 AWS_DESTINATION=s3://bucketname/path
+
+# AZURE dry run remove. 0 - false | 1 - true (default)
+AZURE_DRYRUN=1
+
+# Azure Storage
+AZURE_APP_TENANT_ID=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+AZURE_APP_ID=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef
+AZURE_APP_SECRET=*************
+AZURE_STORAGE_ACCOUNT=mystorageaccount
+AZURE_STORAGE_BLOB_CONTAINER=mycontainer
+AZURE_STORAGE_BLOB_PREFIX=pathincontainer/
 
 # Email address where notifications are sent
 MAIL_TO=name@email.com
